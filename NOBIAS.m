@@ -1,7 +1,7 @@
 
 function out = NOBIAS(data,varargin)
-%% data input: data: a strct, each element should have variable 
-%% obs a 2 by T tracks and a variable TrID that indicate track ID, see example data
+% data input: data: a strct, each element should have variable 
+% obs a 2 by T tracks and a variable TrID that indicate track ID, see example data
 
 %%%%
 % Written by Ziyuan Chen at the University of Michigan last update
@@ -24,7 +24,7 @@ function out = NOBIAS(data,varargin)
 %
 dim=size(data(1).obs,1);
 
-%% Parameters
+% Parameters
 Params.dim=dim;
 Params.Nmax=10;
 Params.Niter=10000;
@@ -64,6 +64,14 @@ elseif nargin>1
     warning('use paired inputs')
     return
 end
+
+% test the existence of the light speed toolbox
+try
+   x = randgamma(1);
+catch ME
+    error('Please Makse Sure the light speed toolbox is put in path, avaialble on https://github.com/tminka/lightspeed')
+end
+clear x
 
 
 Nmax=Params.Nmax;
