@@ -81,13 +81,13 @@ Allmean=cell(Niter/SampleSaveFreq,1);
 Allsigma=cell(Niter/SampleSaveFreq,1);
 AllWeight=cell(Niter/SampleSaveFreq,1);
 
-%% initilize the parameter space
+% initilize the parameter space
 [theta, Suff_Stat , stateCounts , hyperparams, prior_params] = NOBIAS_init(Params);
 
-%% sample transition,
+% sample transition
 trans_struct = NOBIAS_sample_trans(stateCounts,hyperparams);
 
-%% sample the parameter space
+% sample the parameter space
 % by default used a NIW prior
 theta = NOBIAS_theta(theta,Suff_Stat,Params);
 L=zeros(1,Niter);
