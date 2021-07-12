@@ -69,8 +69,8 @@ end
 try
    x = randgamma(1);
 catch ME
-    error(['Please Makse Sure the light speed toolbox is put in path and install them with the command install_lightspeed ',...
-        'avaialble on https://github.com/tminka/lightspeed'])
+    error(sprintf(['Please Makse Sure the light speed toolbox is put in path and install them with the command install_lightspeed;\n',...
+   'avaialble on https://github.com/tminka/lightspeed']))
 end
 clear x
 
