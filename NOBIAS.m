@@ -109,7 +109,7 @@ for n=1:Niter
     
     L(n)=length(unique(extractfield(stateSeq,'z')));
     if rem(n,Params.DispFreq)==0
-        fprintf('Current state number L= %d\n',L(n))
+        fprintf('Current number of states L= %d\n',L(n))
     end
     if rem(n,SampleSaveFreq)==0
         Allmean{n/SampleSaveFreq}=theta.mu;
