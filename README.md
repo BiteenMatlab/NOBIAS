@@ -13,7 +13,7 @@ NOBIAS also requires the lightspeed toolbox in Matlab which can be found at http
 
 ## Usage
 
-Use this quick start guide for now.
+Use the quick start guide for now: https://github.com/BiteenMatlab/NOBIAS/blob/main/NOBIAS%20Quick%20Start%20Guide.pdf
 
 A detailed user guide will be finished very soon.
 
