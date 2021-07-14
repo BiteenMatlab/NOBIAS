@@ -11,6 +11,8 @@ Download the entire folder and unzip if you downloaded the .zip folder. Change t
 
 NOBIAS also requires the lightspeed toolbox in Matlab which can be found at https://github.com/tminka/lightspeed
 
+Running the RNN module needs the MATLAB Deep Learning toolbox: https://www.mathworks.com/products/deep-learning.html
+
 ## Usage
 
 Use the quick start guide for now: https://github.com/BiteenMatlab/NOBIAS/blob/main/NOBIAS%20Quick%20Start%20Guide.pdf
