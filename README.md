@@ -13,6 +13,8 @@ NOBIAS also requires the lightspeed toolbox in Matlab which can be found at http
 
 Running the RNN module needs the MATLAB Deep Learning toolbox: https://www.mathworks.com/products/deep-learning.html
 
+Running the RNN module needs the MATLAB Mapping toolbox: https://www.mathworks.com/products/mapping.html
+
 ## Usage
 
 Use the quick start guide for now: https://github.com/BiteenMatlab/NOBIAS/blob/main/NOBIAS%20Quick%20Start%20Guide.pdf
