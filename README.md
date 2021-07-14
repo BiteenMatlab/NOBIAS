@@ -1,6 +1,6 @@
 # NOBIAS
 
-The NOBIAS algorithm(NOnparametric Bayesian Inference for Anomalous diffusion in Single-molecule tracking) is a two-module algorithm for analysis of multi diffusive state SPT dataset and predict the anomalous diffuion type for each state.
+The NOBIAS algorithm (NOnparametric Bayesian Inference for Anomalous diffusion in Single-molecule tracking) is a two-module algorithm for analysis of multi-diffusive state SPT datasets that predicts the anomalous diffuion type for each state.
 
 
 Written by Ziyuan Chen at the University of Michigan.
