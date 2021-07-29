@@ -1,10 +1,17 @@
-function [Allweight,AllD]=NOBIAS_plot(out,data, Params)
+function Results=NOBIAS_plot(out,data, Params)
 Niter=length(out.L);
+if nargin<3
+    Params.frametime=0.04; %s
+    Params.pixelsize=0.049; %um
+    Params.Plot=1;
+    Params.MotionBlur=1;%whether to do the motion blur correction, need data to have corr_obs
+    Params.SampleSaveFreq=10;
+end
 SampleSaveFreq=Params.SampleSaveFreq;
 c=colormap('lines');
 
 state_num=mode(out.L(end-5000:end));
-burn=100;
+burn=1000;
 
 used_state=unique(out.stateSeq);
 savd_L=out.L(rem(1:Niter,SampleSaveFreq)==0);
@@ -12,7 +19,8 @@ Sampled_sigma=out.theta.Sigma(savd_L==state_num);
 Sampled_sigma=Sampled_sigma(burn+1:end);
 Sampled_weight=out.theta.Weight(savd_L==state_num);
 Sampled_weight=Sampled_weight(burn+1:end);
-
+Sampled_Trans=out.trans_struct.Trans(savd_L==state_num);
+Sampled_Trans=Sampled_Trans(burn+1:end);
 [~, L_Ranked]=sort(Sampled_sigma{end}(1,1,used_state),'ascend');
 used_state=used_state(L_Ranked);
 
@@ -31,7 +39,7 @@ if Params.MotionBlur
     corrMu_mean=mean(corrMu,1);
 end
 Allweight=zeros(length(Sampled_weight),length(used_state));
-
+AllTran=zeros(length(Sampled_weight),length(used_state),length(used_state));
 if ~asymeteric
     AllSigma=zeros(length(Sampled_weight),length(used_state));
     AllD=zeros(length(Sampled_weight),length(used_state));
@@ -39,6 +47,7 @@ if ~asymeteric
     for i=1:length(Sampled_weight)
         tempSig=Sampled_sigma{i};
         Allweight(i,:)=Sampled_weight{i}(used_state);
+        AllTran(i,:,:)=Sampled_Trans{i}(used_state,used_state);
         AllSigma(i,:)=(tempSig(1,1,used_state)+tempSig(2,2,used_state))/2;
         if Params.MotionBlur
             AllD(i,:)=(AllSigma(i,:) + 2*corrMu_mean)/2/frametime*pixelsize*pixelsize;
@@ -49,9 +58,11 @@ if ~asymeteric
 else
     AllSigma=zeros(length(Sampled_weight),length(used_state),2);
     AllD=zeros(length(Sampled_weight),length(used_state),2);
+    
     for i=1:length(Sampled_weight)
         tempSig=Sampled_sigma{i};
         Allweight(i,:)=Sampled_weight{i}(used_state);
+        AllTran(i,:,:)=Sampled_Trans{i}(used_state,used_state);
         AllSigma(i,:,1)=tempSig(1,1,used_state);
         AllSigma(i,:,2)=tempSig(2,2,used_state);
         if Params.MotionBlur
@@ -90,5 +101,11 @@ if Params.Plot
     xlabel('Weight Fraction')
     hold off
 end
+Results.AllD=AllD;
+Results.Allweight=Allweight;
+Results.AllTran=AllTran;
+Results.D=mean(AllD,1);
+Results.Weight=mean(Allweight);
+Results.Trans=squeeze(mean(AllTran,1));
 
 end

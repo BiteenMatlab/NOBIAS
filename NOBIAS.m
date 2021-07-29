@@ -27,13 +27,13 @@ dim=size(data(1).obs,1);
 % Parameters
 Params.dim=dim;
 Params.Nmax=10;
-Params.Niter=10000;
+Params.Niter=20000;
 Params.SampleSaveFreq=10;
 % Hyper hyperparameters are set within code
 Params.gamma=0.1;
 Params.alpha=1;
-Params.kappa=5;  % the sticky parameter
-Params.DispFreq=500;
+Params.kappa=20;  % the sticky parameter
+Params.DispFreq=5000;
 
 
 % prior parameter for the NIW sampling
@@ -42,7 +42,7 @@ Params.K = 0.1;  % NIW(kappa,theta,delta,nu_delta); K is kappa
 Params.nu = dim+2;  % d+2
 Params.nu_delta= eye(dim); %(nu-d-1) * diag(d)
 
-Params.MotionBlur=0; %whether to do the motion blur correction, need data to have corr_obs
+Params.MotionBlur=1; %whether to do the motion blur correction, need data to have corr_obs
 Params.frametime=0.04; %s
 Params.pixelsize=0.049; %um
 Params.Plot=1;
@@ -69,8 +69,7 @@ end
 try
    x = randgamma(1);
 catch ME
-    error(sprintf(['Please Makse Sure the light speed toolbox is put in path and install them with the command install_lightspeed;\n',...
-   'avaialble on https://github.com/tminka/lightspeed']))
+    error('Please Makse Sure the light speed toolbox is put in path, avaialble on https://github.com/tminka/lightspeed')
 end
 clear x
 
@@ -81,7 +80,9 @@ SampleSaveFreq=Params.SampleSaveFreq;
 Allmean=cell(Niter/SampleSaveFreq,1);
 Allsigma=cell(Niter/SampleSaveFreq,1);
 AllWeight=cell(Niter/SampleSaveFreq,1);
-
+AllTran=cell(Niter/SampleSaveFreq,1);
+AllPi_init=cell(Niter/SampleSaveFreq,1);
+AllBeta_vec=cell(Niter/SampleSaveFreq,1);
 % initilize the parameter space
 [theta, Suff_Stat , stateCounts , hyperparams, prior_params] = NOBIAS_init(Params);
 
@@ -109,7 +110,7 @@ for n=1:Niter
     
     L(n)=length(unique(extractfield(stateSeq,'z')));
     if rem(n,Params.DispFreq)==0
-        fprintf('Current number of states L= %d\n',L(n))
+        fprintf('Current state number L= %d\n',L(n))
     end
     if rem(n,SampleSaveFreq)==0
         Allmean{n/SampleSaveFreq}=theta.mu;
@@ -120,6 +121,9 @@ for n=1:Niter
             tempweight(state)= sum(extractfield(stateSeq,'z')==state);
         end
         AllWeight{n/SampleSaveFreq}=tempweight/sum(tempweight);
+        AllTran{n/SampleSaveFreq}=trans_struct.Trans;
+        AllPi_init{n/SampleSaveFreq}=trans_struct.pi_init;
+        AllBeta_vec{n/SampleSaveFreq}=trans_struct.beta_vec;
     end
 end
 
@@ -127,13 +131,14 @@ out.theta.mu=Allmean;
 out.theta.Sigma=Allsigma;
 out.theta.Weight=AllWeight;
 
-out.trans_struct=trans_struct;
+out.trans_struct.Trans=AllTran;
+out.trans_struct.pi_init=AllPi_init;
+out.trans_struct.beta_vec=AllBeta_vec;
 out.stateSeq=extractfield(stateSeq,'z');
 out.hyperparams=hyperparams;
 out.L=L;
 out.SampleSaveFreq=SampleSaveFreq;
-[Allweight,AllD]=NOBIAS_plot(out,data,Params );
-out.AllD=AllD;
-out.Allweight=Allweight;
+Results=NOBIAS_plot(out,data,Params);
+out.Results=Results;
 
 end
