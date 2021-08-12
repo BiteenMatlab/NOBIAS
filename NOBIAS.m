@@ -32,7 +32,7 @@ Params.SampleSaveFreq=10;
 % Hyper hyperparameters are set within code
 Params.gamma=0.1;
 Params.alpha=1;
-Params.kappa=20;  % the sticky parameter
+Params.kappa=100;  % the sticky parameter
 Params.DispFreq=5000;
 
 
@@ -106,7 +106,7 @@ for n=1:Niter
     trans_struct = NOBIAS_sample_trans(stateCounts,hyperparams);
     theta = NOBIAS_theta(theta,Suff_Stat,prior_params);
     % hyperparameters can be resampled if found needed
-    %     hyperparams = NOBIAS_resamplehyper(stateCounts,hyperhyperparams,hyperparams);
+%     hyperparams = NOBIAS_resamplehyper(stateCounts,hyperhyperparams,hyperparams);
     
     L(n)=length(unique(extractfield(stateSeq,'z')));
     if rem(n,Params.DispFreq)==0
@@ -135,10 +135,12 @@ out.trans_struct.Trans=AllTran;
 out.trans_struct.pi_init=AllPi_init;
 out.trans_struct.beta_vec=AllBeta_vec;
 out.stateSeq=extractfield(stateSeq,'z');
+
 out.hyperparams=hyperparams;
 out.L=L;
 out.SampleSaveFreq=SampleSaveFreq;
 Results=NOBIAS_plot(out,data,Params);
 out.Results=Results;
+out.reord_stateSeq = NOBIAS_out_reorderStateSeq(out);
 
 end
