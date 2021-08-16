@@ -10,8 +10,8 @@ end
 SampleSaveFreq=Params.SampleSaveFreq;
 c=colormap('lines');
 
-state_num=mode(out.L(end-5000:end));
-burn=1000;
+state_num=mode(out.L(end-500:end));
+burn=200;
 
 used_state=unique(out.stateSeq);
 savd_L=out.L(rem(1:Niter,SampleSaveFreq)==0);
