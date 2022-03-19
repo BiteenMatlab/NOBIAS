@@ -9,7 +9,7 @@ function data=NOBIAS_preparedata(AllTracks)
 TrID=[];
 All_steps={};
 All_corrstep={};
-min_length=5;
+min_length=3;
 for i=1:length(AllTracks)
     temptr=AllTracks{i};
     fixedTrack = nan(max(temptr(:,2)),size(temptr,2));
@@ -32,6 +32,8 @@ end
 data.obs=cat(1,All_steps{:})';
 data.TrID=TrID;
 data.obs_corr=cat(1,All_corrstep{:})'; %not needed if motion blur correction not wanted
+% scale data to certain varience
+data = NOBIAS_scale_data(data);
 
 
 end

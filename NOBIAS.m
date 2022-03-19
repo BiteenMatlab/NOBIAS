@@ -32,8 +32,8 @@ Params.SampleSaveFreq=10;
 % Hyper hyperparameters are set within code
 Params.gamma=0.1;
 Params.alpha=1;
-Params.kappa=100;  % the sticky parameter
-Params.DispFreq=5000;
+Params.kappa=50;  % the sticky parameter
+Params.DispFreq=1000;
 
 
 % prior parameter for the NIW sampling
@@ -47,7 +47,9 @@ Params.frametime=0.04; %s
 Params.pixelsize=0.049; %um
 Params.Plot=1;
 
-
+if isfield(data,'scale_factor')
+    Params.pixelsize = Params.pixelsize*data.scale_factor;
+end
 
 fNames=fieldnames(Params);
 if nargin>1&&rem(nargin,2)==1
