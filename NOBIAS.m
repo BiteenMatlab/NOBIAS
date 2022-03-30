@@ -47,9 +47,6 @@ Params.frametime=0.04; %s
 Params.pixelsize=0.049; %um
 Params.Plot=1;
 
-if isfield(data,'scale_factor')
-    Params.pixelsize = Params.pixelsize*data.scale_factor;
-end
 
 fNames=fieldnames(Params);
 if nargin>1&&rem(nargin,2)==1
@@ -75,6 +72,9 @@ catch ME
 end
 clear x
 
+if isfield(data,'scale_factor')
+    Params.pixelsize = Params.pixelsize*data.scale_factor;
+end
 
 Nmax=Params.Nmax;
 Niter=Params.Niter;
